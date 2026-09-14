@@ -95,7 +95,7 @@ export const ZeroBotsLogo = ({
         {/* Actual ZeroBots Icon with ambient glow */}
         <div className={`relative ${dimensions.icon} flex items-center justify-center shrink-0`}>
           {/* Ambient Cyber Glow */}
-          <div className="absolute inset-0 bg-cyan-400/25 rounded-full blur-md scale-95 pointer-events-none" />
+          <div className="absolute inset-0 bg-cyan-400/25 rounded-full blur-md scale-50 pointer-events-none" />
 
           {/* Actual Brand Icon (webp / png from assets/icon) */}
           <Image
@@ -104,7 +104,7 @@ export const ZeroBotsLogo = ({
             width={dimensions.pixelSize}
             height={dimensions.pixelSize}
             priority={isHighPriority}
-            className="w-full h-full object-contain relative z-10 drop-shadow-[0_0_14px_rgba(0,240,255,0.7)] transition-transform duration-300 group-hover:scale-105"
+            className="w-full h-full object-contain relative z-10 transition-transform duration-300 group-hover:scale-105"
           />
         </div>
 
@@ -113,9 +113,8 @@ export const ZeroBotsLogo = ({
           <div className="flex flex-col shrink min-w-0">
             <div className="flex items-center tracking-wider">
               <span
-                className={`${dimensions.text} text-white tracking-widest leading-tight ${
-                  useBrandFont ? `${zeroBotsFont.className} font-normal` : "font-black font-mono"
-                }`}
+                className={`${dimensions.text} text-white tracking-widest leading-tight ${useBrandFont ? `${zeroBotsFont.className} font-normal` : "font-black font-mono"
+                  }`}
               >
                 ZER<span className="text-[#00f0ff] drop-shadow-[0_0_10px_#00f0ff]">O</span>BOTS
               </span>
