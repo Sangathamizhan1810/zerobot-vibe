@@ -51,6 +51,15 @@ function createTransporter() {
   });
 }
 
+function escapeHtml(str: string): string {
+  return str
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
 /**
  * Sends the enquiry details to zerobots.official@gmail.com
  */
@@ -69,12 +78,18 @@ export async function sendEnquiryNotification(data: EnquiryPayload) {
     };
   }
 
-  const sanitizedMessage = data.message.replace(/\n/g, "<br />");
   const timestamp = new Date().toLocaleString("en-US", {
     timeZone: "Asia/Kolkata",
     dateStyle: "full",
     timeStyle: "medium",
   });
+
+  const safeName = escapeHtml(data.name);
+  const safeEmail = escapeHtml(data.email);
+  const safeOrg = escapeHtml(data.organization || "Not Specified");
+  const safeInquiryType = escapeHtml(data.inquiryType);
+  const safeReferenceId = escapeHtml(data.referenceId);
+  const safeMessage = escapeHtml(data.message).replace(/\n/g, "<br />");
 
   const subject = `[ZeroBots Enquiry] ${data.inquiryType} from ${data.name} (${data.referenceId})`;
 
@@ -101,72 +116,160 @@ Reply directly to this email to respond to ${data.name} (${data.email}).
 
   const htmlContent = `
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="utf-8">
-  <style>
-    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #f4f7f9; margin: 0; padding: 24px; color: #1e293b; }
-    .container { max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 16px; overflow: hidden; border: 1px solid #e2e8f0; box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
-    .header { background: #040e17; padding: 28px 32px; border-bottom: 2px solid #00f0ff; }
-    .header h1 { margin: 0; color: #ffffff; font-size: 20px; font-weight: 800; letter-spacing: 0.1em; }
-    .header h1 span { color: #00f0ff; }
-    .badge { display: inline-block; padding: 4px 12px; background: rgba(0, 240, 255, 0.1); border: 1px solid rgba(0, 240, 255, 0.3); border-radius: 9999px; color: #008899; font-size: 11px; font-weight: 700; text-transform: uppercase; margin-top: 8px; }
-    .content { padding: 32px; }
-    .field-group { margin-bottom: 20px; }
-    .field-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: #64748b; font-weight: 700; margin-bottom: 4px; }
-    .field-value { font-size: 15px; color: #0f172a; font-weight: 600; }
-    .message-box { background: #f8fafc; border: 1px solid #e2e8f0; border-left: 4px solid #00f0ff; border-radius: 8px; padding: 18px; font-size: 14px; line-height: 1.6; color: #334155; margin-top: 12px; white-space: pre-line; }
-    .footer { background: #f8fafc; padding: 20px 32px; border-top: 1px solid #e2e8f0; font-size: 12px; color: #64748b; text-align: center; }
-    .footer a { color: #008899; text-decoration: none; font-weight: 600; }
-    .ref-box { background: #040e17; color: #00f0ff; font-family: monospace; font-size: 12px; padding: 6px 12px; border-radius: 6px; display: inline-block; margin-top: 4px; }
-  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="color-scheme" content="dark light">
+  <meta name="supported-color-schemes" content="dark light">
+  <title>ZeroBots Enquiry - ${safeReferenceId}</title>
 </head>
-<body>
-  <div class="container">
-    <div class="header">
-      <h1>ZER<span>O</span>BOTS • DISPATCH GATEWAY</h1>
-      <div class="badge">${data.inquiryType}</div>
-    </div>
-    
-    <div class="content">
-      <div class="field-group">
-        <div class="field-label">Reference ID</div>
-        <div class="ref-box">${data.referenceId}</div>
-      </div>
+<body style="margin: 0; padding: 0; background-color: #020609; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%;">
+  <!-- Outer Wrapper Table -->
+  <table role="presentation" width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color: #020609; width: 100%; margin: 0; padding: 16px 8px;">
+    <tr>
+      <td align="center" style="padding: 0;">
+        <!-- Main Card Container -->
+        <table role="presentation" width="100%" border="0" cellspacing="0" cellpadding="0" style="max-width: 580px; width: 100%; background-color: #06121e; border: 1px solid rgba(0, 240, 255, 0.25); border-radius: 12px; overflow: hidden; box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6);">
+          
+          <!-- Top Cyber Accent Line -->
+          <tr>
+            <td style="height: 3px; background-color: #00f0ff; line-height: 3px; font-size: 3px;">&nbsp;</td>
+          </tr>
 
-      <div class="field-group" style="display: flex; gap: 24px;">
-        <div style="flex: 1;">
-          <div class="field-label">Sender Name</div>
-          <div class="field-value">${data.name}</div>
-        </div>
-        <div style="flex: 1;">
-          <div class="field-label">Sender Email</div>
-          <div class="field-value"><a href="mailto:${data.email}" style="color: #008899; text-decoration: none;">${data.email}</a></div>
-        </div>
-      </div>
+          <!-- Header -->
+          <tr>
+            <td style="padding: 24px 20px 20px 20px; background-color: #040e17; border-bottom: 1px solid rgba(0, 240, 255, 0.15);">
+              <table role="presentation" width="100%" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                  <td>
+                    <h1 style="margin: 0 0 10px 0; color: #ffffff; font-size: 19px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase;">
+                      ZER<span style="color: #00f0ff;">O</span>BOTS • DISPATCH GATEWAY
+                    </h1>
+                    <div style="display: inline-block; padding: 5px 12px; background-color: rgba(0, 240, 255, 0.12); border: 1px solid rgba(0, 240, 255, 0.35); border-radius: 20px; color: #38bdf8; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em;">
+                      ${safeInquiryType}
+                    </div>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
 
-      <div class="field-group" style="display: flex; gap: 24px;">
-        <div style="flex: 1;">
-          <div class="field-label">Organization</div>
-          <div class="field-value">${data.organization || "Not Specified"}</div>
-        </div>
-        <div style="flex: 1;">
-          <div class="field-label">Received At</div>
-          <div class="field-value" style="font-size: 13px; color: #64748b;">${timestamp}</div>
-        </div>
-      </div>
+          <!-- Content Body -->
+          <tr>
+            <td style="padding: 24px 20px;">
 
-      <div class="field-group" style="margin-top: 24px;">
-        <div class="field-label">Enquiry Message Content</div>
-        <div class="message-box">${data.message}</div>
-      </div>
-    </div>
+              <!-- Reference ID Badge -->
+              <table role="presentation" width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-bottom: 18px;">
+                <tr>
+                  <td>
+                    <div style="font-size: 11px; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px;">
+                      REFERENCE ID
+                    </div>
+                    <div style="display: inline-block; background-color: #020609; color: #00f0ff; border: 1px solid rgba(0, 240, 255, 0.4); font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 13px; font-weight: 700; padding: 7px 14px; border-radius: 6px; letter-spacing: 0.05em;">
+                      ${safeReferenceId}
+                    </div>
+                  </td>
+                </tr>
+              </table>
 
-    <div class="footer">
-      This enquiry was submitted via the official ZeroBots website portal.<br>
-      You can <strong>reply directly to this email</strong> to respond to <strong>${data.name}</strong> (${data.email}).
-    </div>
-  </div>
+              <!-- Sender Name -->
+              <table role="presentation" width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-bottom: 16px;">
+                <tr>
+                  <td>
+                    <div style="font-size: 11px; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px;">
+                      SENDER NAME
+                    </div>
+                    <div style="font-size: 16px; font-weight: 700; color: #ffffff; line-height: 1.4;">
+                      ${safeName}
+                    </div>
+                  </td>
+                </tr>
+              </table>
+
+              <!-- Sender Email -->
+              <table role="presentation" width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-bottom: 16px;">
+                <tr>
+                  <td>
+                    <div style="font-size: 11px; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px;">
+                      SENDER EMAIL
+                    </div>
+                    <div style="font-size: 15px; font-weight: 600; line-height: 1.4; word-break: break-all; overflow-wrap: anywhere; word-wrap: break-word;">
+                      <a href="mailto:${safeEmail}" style="color: #00f0ff; text-decoration: underline; text-underline-offset: 3px;">
+                        ${safeEmail}
+                      </a>
+                    </div>
+                  </td>
+                </tr>
+              </table>
+
+              <!-- Organization -->
+              <table role="presentation" width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-bottom: 16px;">
+                <tr>
+                  <td>
+                    <div style="font-size: 11px; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px;">
+                      ORGANIZATION
+                    </div>
+                    <div style="font-size: 15px; font-weight: 600; color: #e2e8f0; line-height: 1.4;">
+                      ${safeOrg}
+                    </div>
+                  </td>
+                </tr>
+              </table>
+
+              <!-- Received At -->
+              <table role="presentation" width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-bottom: 22px;">
+                <tr>
+                  <td>
+                    <div style="font-size: 11px; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px;">
+                      RECEIVED AT
+                    </div>
+                    <div style="font-size: 13px; color: #94a3b8; line-height: 1.4;">
+                      ${timestamp} (IST)
+                    </div>
+                  </td>
+                </tr>
+              </table>
+
+              <!-- Message Content Box -->
+              <table role="presentation" width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-bottom: 24px;">
+                <tr>
+                  <td>
+                    <div style="font-size: 11px; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px;">
+                      ENQUIRY MESSAGE CONTENT
+                    </div>
+                    <div style="background-color: #02070d; border: 1px solid rgba(0, 240, 255, 0.2); border-left: 4px solid #00f0ff; border-radius: 8px; padding: 16px 18px; font-size: 14px; line-height: 1.65; color: #f1f5f9; word-break: break-word; overflow-wrap: anywhere; white-space: pre-wrap;">${safeMessage}</div>
+                  </td>
+                </tr>
+              </table>
+
+              <!-- Direct Reply Action CTA -->
+              <table role="presentation" width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-top: 8px; margin-bottom: 8px;">
+                <tr>
+                  <td align="center">
+                    <a href="mailto:${safeEmail}?subject=${encodeURIComponent(`Re: ${subject}`)}" style="display: block; width: 100%; max-width: 320px; box-sizing: border-box; background-color: #00f0ff; color: #020609; text-align: center; padding: 13px 20px; border-radius: 8px; font-size: 13px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; text-decoration: none;">
+                      Reply Directly to Sender
+                    </a>
+                  </td>
+                </tr>
+              </table>
+
+            </td>
+          </tr>
+
+          <!-- Footer -->
+          <tr>
+            <td style="padding: 18px 20px; background-color: #030a12; border-top: 1px solid rgba(255, 255, 255, 0.08); font-size: 12px; color: #64748b; text-align: center; line-height: 1.6;">
+              This inquiry was submitted through the official <strong>ZeroBots</strong> website portal.<br>
+              Direct sender: <span style="color: #94a3b8;">${safeName}</span> &lt;<span style="color: #00f0ff; word-break: break-all;">${safeEmail}</span>&gt;
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
 </body>
 </html>
 `;
