@@ -9,7 +9,6 @@ interface ZeroBotsLogoProps {
   showTagline?: boolean;
   showText?: boolean;
   className?: string;
-  useImagePoster?: boolean;
   format?: "webp" | "png";
   priority?: boolean;
   useBrandFont?: boolean;
@@ -20,27 +19,10 @@ export const ZeroBotsLogo = ({
   showTagline = false,
   showText = true,
   className = "",
-  useImagePoster = false,
   format = "webp",
   priority,
   useBrandFont = false,
 }: ZeroBotsLogoProps) => {
-  if (useImagePoster) {
-    return (
-      <div className={`relative flex flex-col items-center select-none ${className}`}>
-        <div className="relative w-64 h-80 sm:w-80 sm:h-96 md:w-96 md:h-[480px] drop-shadow-[0_0_40px_rgba(0,240,255,0.4)]">
-          <Image
-            src="/zerobots_matte_poster.png"
-            alt="ZeroBots - Robotics Reimagined"
-            fill
-            sizes="(max-width: 768px) 320px, 480px"
-            priority
-            className="object-contain"
-          />
-        </div>
-      </div>
-    );
-  }
 
   // Dimension scaling tailored to square icon aspect ratio
   const dimensions = {

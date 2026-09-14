@@ -1,5 +1,6 @@
 import React from "react";
 import Image from "next/image";
+import posterBg from "@/assets/icon/zerobots_matte_poster_bg.png";
 
 interface PosterBackgroundProps {
   variant?: "default" | "subtle" | "intense";
@@ -15,7 +16,7 @@ export const PosterBackground = ({
       {/* 1. Underlying Poster Background Layer */}
       <div className="absolute inset-0 w-full h-full">
         <Image
-          src="/zerobots_matte_poster_bg.png"
+          src={posterBg}
           alt="ZeroBots Cyber Environment"
           fill
           priority

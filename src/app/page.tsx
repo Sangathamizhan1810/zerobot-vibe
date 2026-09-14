@@ -10,7 +10,7 @@ import { Footer } from "@/components/layout/Footer";
 export default function HomePage() {
   return (
     <SnapContainer>
-      {/* SECTION 1: HERO (MATCHING POSTER DIRECTLY) */}
+      {/* SECTION 1: HERO */}
       <SnapSection index={0} backgroundElement={<PosterBackground variant="default" />}>
         <div className="flex flex-col items-center justify-center text-center max-w-4xl mx-auto w-full px-2">
           {/* Welcome Pill */}

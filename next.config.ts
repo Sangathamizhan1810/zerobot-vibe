@@ -83,7 +83,7 @@ const nextConfig: NextConfig = {
         ],
       },
       {
-        // Cache static branding posters, assets and icons
+        // Cache static assets and icons
         source: "/:path*.(png|jpg|jpeg|webp|avif|svg|ico|ttf|woff|woff2)",
         headers: [
           {

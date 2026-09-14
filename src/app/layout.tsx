@@ -5,6 +5,7 @@ import { SOCIAL_LINKS } from "@/data/socials";
 import icon32 from "@/assets/icon/zerobots-32x32.png";
 import icon16 from "@/assets/icon/zerobots-16x16.png";
 import appleIcon from "@/assets/icon/zerobots-180x180.png";
+import icon512 from "@/assets/icon/zerobots-512x512.png";
 
 // Base URL resolves dynamically: checks Vercel deployment variables, falling back to localhost
 const siteBaseUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL
@@ -53,21 +54,21 @@ export const metadata: Metadata = {
     siteName: "ZeroBots",
     images: [
       {
-        url: "/zerobots_matte_poster.png",
-        width: 1200,
-        height: 630,
+        url: icon512.src,
+        width: 512,
+        height: 512,
         alt: "ZeroBots - Robotics Reimagined",
       },
     ],
   },
   twitter: {
-    card: "summary_large_image",
+    card: "summary",
     site: SOCIAL_LINKS.xHandle,
     creator: SOCIAL_LINKS.xHandle,
     title: "ZeroBots | Robotics Reimagined",
     description:
       "ZeroBots pioneers accessible, indigenous autonomous companion robotics (Blob) and precision digital engineering solutions.",
-    images: ["/zerobots_matte_poster.png"],
+    images: [icon512.src],
   },
   other: {
     // OpenGraph social identity references for LinkedIn & Meta (Instagram)
@@ -108,7 +109,7 @@ export default function RootLayout({
     "@type": "Organization",
     name: "ZeroBots",
     url: siteBaseUrl,
-    logo: `${siteBaseUrl}/zerobots_matte_poster.png`,
+    logo: `${siteBaseUrl}${icon512.src}`,
     sameAs: [
       SOCIAL_LINKS.instagram,
       SOCIAL_LINKS.linkedin,
