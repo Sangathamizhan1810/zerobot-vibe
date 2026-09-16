@@ -5,7 +5,7 @@
   "scripts": {
     "prebuild": "node -e \"require('fs').rmSync('.next', { recursive: true, force: true })\"",
     "dev": "next dev",
-    "build": "next build",
+    "build": "if [ \"$VERCEL\" = \"1\" ]; then next build; else next build --webpack; fi",
     "start": "next start"
   },
   "dependencies": {
