@@ -10,6 +10,8 @@ const nextConfig: NextConfig = {
     "100.105.255.17",
     "100.105.255.17:3000",
     "localhost:3000",
+    "*.godaddy.com",      // Allows GoDaddy's primary preview domains
+    "*.godaddysites.com"  // Allows GoDaddy's alternate hosted domains
   ],
   reactCompiler: true,
   compress: true,
