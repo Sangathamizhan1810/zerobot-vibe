@@ -1,8 +1,8 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  output: "standalone", // Keep this for standard Node hosting
-  distDir: "build",
+  output: process.env.VERCEL ? undefined : "standalone", // Keep this for standard Node hosting and vercel support
+  distDir: process.env.VERCEL ? undefined : "build",
   // Allow hot reload (HMR) when testing on mobile devices via hotspot or LAN
   allowedDevOrigins: [
     "192.168.137.1",
