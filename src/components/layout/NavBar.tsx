@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { Cpu, Code2, ChevronDown, Menu, X, ArrowRight, Layers } from "lucide-react";
+import { Cpu, Code2, ChevronDown, Menu, X, ArrowRight } from "lucide-react";
 import { ZeroBotsLogo } from "@/components/graphic/ZeroBotsLogo";
 
 export const NavBar = () => {
@@ -15,9 +15,9 @@ export const NavBar = () => {
   const [isMobileProductsOpen, setIsMobileProductsOpen] = useState(false);
   const [isMobileServicesOpen, setIsMobileServicesOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [activeSection, setActiveSection] = useState("home");
 
   useEffect(() => {
-    // Close dropdowns and mobile drawer on route change
     setIsMobileOpen(false);
     setIsProductsDropdownOpen(false);
     setIsServicesDropdownOpen(false);
@@ -25,29 +25,57 @@ export const NavBar = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      const snapEl = document.querySelector(".snap-container");
-      const currentScroll = snapEl ? snapEl.scrollTop : window.scrollY;
-      if (currentScroll > 20) {
-        setScrolled(true);
-      } else {
-        setScrolled(false);
+      const currentScroll = window.scrollY;
+      setScrolled(currentScroll > 20);
+
+      // Section tracking
+      const sections = ["home", "about", "hardware", "software", "enquiries"];
+      const scrollPosition = currentScroll + 120; // offset for navbar height
+
+      for (const section of sections) {
+        const element = document.getElementById(section);
+        if (element) {
+          const offsetTop = element.offsetTop;
+          const offsetBottom = offsetTop + element.offsetHeight;
+
+          if (scrollPosition >= offsetTop && scrollPosition < offsetBottom) {
+            setActiveSection(section);
+            break;
+          }
+        }
       }
     };
-    window.addEventListener("scroll", handleScroll, { capture: true, passive: true });
-    return () => window.removeEventListener("scroll", handleScroll, { capture: true });
-  }, [pathname]);
 
-  const isProductsActive = pathname.startsWith("/products");
-  const isServicesActive = pathname.startsWith("/services");
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll(); // Initial check
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
+    if (pathname !== "/") return; // Only prevent default if on home page
+    e.preventDefault();
+    const element = document.getElementById(id);
+    if (element) {
+      const y = element.getBoundingClientRect().top + window.scrollY - 80;
+      window.scrollTo({ top: y, behavior: "smooth" });
+      setIsMobileOpen(false);
+      setIsProductsDropdownOpen(false);
+      setIsServicesDropdownOpen(false);
+      window.history.pushState(null, "", `#${id}`);
+    }
+  };
+
+  const isProductsActive = activeSection === "hardware";
+  const isServicesActive = activeSection === "software";
 
   return (
     <>
       <header className="fixed top-4 sm:top-6 inset-x-0 z-50 flex justify-center px-4 pointer-events-none">
         <nav
-          className={`pointer-events-auto w-full max-w-6xl transition-all duration-300 rounded-full px-4 sm:px-6 py-2.5 sm:py-3 flex items-center justify-between shadow-[0_10px_35px_rgba(0,0,0,0.8)] border ${
+          className={`pointer-events-auto w-full max-w-6xl transition-all duration-500 rounded-full px-4 sm:px-6 py-3 flex items-center justify-between border ${
             scrolled
-              ? "bg-[#030910]/90 backdrop-blur-xl border-cyan-500/30 shadow-cyan-950/40"
-              : "bg-[#040e17]/75 backdrop-blur-lg border-cyan-500/20"
+              ? "bg-[#050505]/80 backdrop-blur-2xl border-white/10 shadow-[0_10px_40px_rgba(0,0,0,0.8)]"
+              : "bg-transparent border-transparent"
           }`}
         >
           {/* LOGO */}
@@ -60,24 +88,26 @@ export const NavBar = () => {
           </Link>
 
           {/* DESKTOP NAVIGATION LINKS */}
-          <div className="hidden md:flex items-center gap-1 lg:gap-2">
+          <div className={`hidden md:flex items-center gap-1 lg:gap-2 p-1.5 rounded-full ${scrolled ? '' : 'bg-[#050505]/40 backdrop-blur-md border border-white/5'}`}>
             <Link
-              href="/"
-              className={`px-3 py-1.5 rounded-full text-sm font-medium tracking-wide transition-all ${
-                pathname === "/"
-                  ? "text-cyan-300 bg-cyan-500/15 border border-cyan-400/30 text-cyber-subtle"
-                  : "text-slate-300 hover:text-cyan-200 hover:bg-white/5"
+              href="#home"
+              onClick={(e) => handleNavClick(e, "home")}
+              className={`px-4 py-2 rounded-full text-sm font-medium tracking-wide transition-all ${
+                activeSection === "home"
+                  ? "text-white bg-white/10"
+                  : "text-slate-400 hover:text-white hover:bg-white/5"
               }`}
             >
               Home
             </Link>
 
             <Link
-              href="/about"
-              className={`px-3 py-1.5 rounded-full text-sm font-medium tracking-wide transition-all ${
-                pathname === "/about" || pathname === "/about-us"
-                  ? "text-cyan-300 bg-cyan-500/15 border border-cyan-400/30 text-cyber-subtle"
-                  : "text-slate-300 hover:text-cyan-200 hover:bg-white/5"
+              href="#about"
+              onClick={(e) => handleNavClick(e, "about")}
+              className={`px-4 py-2 rounded-full text-sm font-medium tracking-wide transition-all ${
+                activeSection === "about"
+                  ? "text-white bg-white/10"
+                  : "text-slate-400 hover:text-white hover:bg-white/5"
               }`}
             >
               About
@@ -85,17 +115,17 @@ export const NavBar = () => {
 
             {/* PRODUCTS DROPDOWN */}
             <div
-              className="relative py-1"
+              className="relative"
               onMouseEnter={() => setIsProductsDropdownOpen(true)}
               onMouseLeave={() => setIsProductsDropdownOpen(false)}
             >
               <button
                 type="button"
                 onClick={() => setIsProductsDropdownOpen(!isProductsDropdownOpen)}
-                className={`flex items-center gap-1 px-3 py-1.5 rounded-full text-sm font-medium tracking-wide transition-all cursor-pointer ${
+                className={`flex items-center gap-1 px-4 py-2 rounded-full text-sm font-medium tracking-wide transition-all cursor-pointer ${
                   isProductsActive
-                    ? "text-cyan-300 bg-cyan-500/15 border border-cyan-400/30 text-cyber-subtle"
-                    : "text-slate-300 hover:text-cyan-200 hover:bg-white/5"
+                    ? "text-white bg-white/10"
+                    : "text-slate-400 hover:text-white hover:bg-white/5"
                 }`}
                 aria-expanded={isProductsDropdownOpen}
                 aria-haspopup="true"
@@ -103,7 +133,7 @@ export const NavBar = () => {
                 <span>Products</span>
                 <ChevronDown
                   className={`w-4 h-4 transition-transform duration-200 ${
-                    isProductsDropdownOpen ? "rotate-180 text-cyan-300" : "text-slate-400"
+                    isProductsDropdownOpen ? "rotate-180 text-white" : "text-slate-500"
                   }`}
                 />
               </button>
@@ -116,29 +146,29 @@ export const NavBar = () => {
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: 8, scale: 0.96 }}
                     transition={{ duration: 0.2, ease: "easeOut" }}
-                    className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-80 p-2.5 rounded-2xl bg-[#030910]/95 backdrop-blur-2xl border border-cyan-400/30 shadow-[0_20px_50px_rgba(0,0,0,0.9),0_0_30px_rgba(0,240,255,0.2)] z-50 pointer-events-auto"
+                    className="absolute top-full left-1/2 -translate-x-1/2 mt-4 w-80 p-3 rounded-[1.5rem] bg-[#0a0a0a]/95 backdrop-blur-3xl border border-white/10 shadow-[0_20px_60px_rgba(0,0,0,0.8)] z-50 pointer-events-auto"
                   >
-                    <div className="text-[10px] uppercase font-mono tracking-wider text-cyan-400/70 px-3 py-1.5 border-b border-cyan-500/15 flex items-center justify-between">
+                    <div className="text-[10px] uppercase font-mono tracking-widest text-slate-500 px-3 py-2 border-b border-white/5 flex items-center justify-between mb-2">
                       <span>Robotics Hardware</span>
-                      <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-ping" />
+                      <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
                     </div>
 
-                    <div className="grid gap-1.5 mt-2">
-                      {/* Hardware Products */}
+                    <div className="grid gap-1">
                       <Link
-                        href="/products/hardware"
-                        className="group flex items-start gap-3 p-3 rounded-xl hover:bg-cyan-500/10 border border-transparent hover:border-cyan-400/30 transition-all"
+                        href="#hardware"
+                        onClick={(e) => handleNavClick(e, "hardware")}
+                        className="group flex items-start gap-4 p-3 rounded-xl hover:bg-white/5 border border-transparent transition-all"
                       >
-                        <div className="w-9 h-9 rounded-lg bg-cyan-950/80 border border-cyan-500/30 flex items-center justify-center text-cyan-300 group-hover:scale-110 group-hover:border-cyan-400 transition-all shrink-0">
+                        <div className="w-10 h-10 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-slate-300 group-hover:scale-105 group-hover:text-white transition-all shrink-0">
                           <Cpu className="w-5 h-5" />
                         </div>
                         <div>
-                          <div className="text-sm font-semibold text-white group-hover:text-cyan-300 flex items-center gap-1 transition-colors">
+                          <div className="text-sm font-medium text-white group-hover:text-cyan-200 flex items-center gap-1 transition-colors">
                             Hardware Products
-                            <ArrowRight className="w-3.5 h-3.5 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all text-cyan-400" />
+                            <ArrowRight className="w-3 h-3 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
                           </div>
-                          <p className="text-xs text-slate-400 leading-snug mt-0.5">
-                            Meet "Blob" — autonomous desktop companion robot (Coming Soon)
+                          <p className="text-xs text-slate-400 font-light leading-relaxed mt-1">
+                            Meet "Blob" — autonomous desktop companion robot
                           </p>
                         </div>
                       </Link>
@@ -150,17 +180,17 @@ export const NavBar = () => {
 
             {/* SERVICES DROPDOWN */}
             <div
-              className="relative py-1"
+              className="relative"
               onMouseEnter={() => setIsServicesDropdownOpen(true)}
               onMouseLeave={() => setIsServicesDropdownOpen(false)}
             >
               <button
                 type="button"
                 onClick={() => setIsServicesDropdownOpen(!isServicesDropdownOpen)}
-                className={`flex items-center gap-1 px-3 py-1.5 rounded-full text-sm font-medium tracking-wide transition-all cursor-pointer ${
+                className={`flex items-center gap-1 px-4 py-2 rounded-full text-sm font-medium tracking-wide transition-all cursor-pointer ${
                   isServicesActive
-                    ? "text-cyan-300 bg-cyan-500/15 border border-cyan-400/30 text-cyber-subtle"
-                    : "text-slate-300 hover:text-cyan-200 hover:bg-white/5"
+                    ? "text-white bg-white/10"
+                    : "text-slate-400 hover:text-white hover:bg-white/5"
                 }`}
                 aria-expanded={isServicesDropdownOpen}
                 aria-haspopup="true"
@@ -168,7 +198,7 @@ export const NavBar = () => {
                 <span>Services</span>
                 <ChevronDown
                   className={`w-4 h-4 transition-transform duration-200 ${
-                    isServicesDropdownOpen ? "rotate-180 text-cyan-300" : "text-slate-400"
+                    isServicesDropdownOpen ? "rotate-180 text-white" : "text-slate-500"
                   }`}
                 />
               </button>
@@ -181,28 +211,27 @@ export const NavBar = () => {
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: 8, scale: 0.96 }}
                     transition={{ duration: 0.2, ease: "easeOut" }}
-                    className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-84 p-2.5 rounded-2xl bg-[#030910]/95 backdrop-blur-2xl border border-cyan-400/30 shadow-[0_20px_50px_rgba(0,0,0,0.9),0_0_30px_rgba(0,240,255,0.2)] z-50 pointer-events-auto"
+                    className="absolute top-full left-1/2 -translate-x-1/2 mt-4 w-84 p-3 rounded-[1.5rem] bg-[#0a0a0a]/95 backdrop-blur-3xl border border-white/10 shadow-[0_20px_60px_rgba(0,0,0,0.8)] z-50 pointer-events-auto"
                   >
-                    <div className="text-[10px] uppercase font-mono tracking-wider text-cyan-400/70 px-3 py-1.5 border-b border-cyan-500/15 flex items-center justify-between">
+                    <div className="text-[10px] uppercase font-mono tracking-widest text-slate-500 px-3 py-2 border-b border-white/5 flex items-center justify-between mb-2">
                       <span>Digital Engineering</span>
-                      <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-ping" />
                     </div>
 
-                    <div className="grid gap-1.5 mt-2">
-                      {/* Software Solutions */}
+                    <div className="grid gap-1">
                       <Link
-                        href="/services/software-solutions"
-                        className="group flex items-start gap-3 p-3 rounded-xl hover:bg-cyan-500/10 border border-transparent hover:border-cyan-400/30 transition-all"
+                        href="#software"
+                        onClick={(e) => handleNavClick(e, "software")}
+                        className="group flex items-start gap-4 p-3 rounded-xl hover:bg-white/5 border border-transparent transition-all"
                       >
-                        <div className="w-9 h-9 rounded-lg bg-cyan-950/80 border border-cyan-500/30 flex items-center justify-center text-cyan-300 group-hover:scale-110 group-hover:border-cyan-400 transition-all shrink-0">
+                        <div className="w-10 h-10 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-slate-300 group-hover:scale-105 group-hover:text-white transition-all shrink-0">
                           <Code2 className="w-5 h-5" />
                         </div>
                         <div>
-                          <div className="text-sm font-semibold text-white group-hover:text-cyan-300 flex items-center gap-1 transition-colors">
-                            Software solutions
-                            <ArrowRight className="w-3.5 h-3.5 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all text-cyan-400" />
+                          <div className="text-sm font-medium text-white group-hover:text-cyan-200 flex items-center gap-1 transition-colors">
+                            Software Solutions
+                            <ArrowRight className="w-3 h-3 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
                           </div>
-                          <p className="text-xs text-slate-400 leading-snug mt-0.5">
+                          <p className="text-xs text-slate-400 font-light leading-relaxed mt-1">
                             Websites, Android & Windows apps, UI/UX & Graphic design
                           </p>
                         </div>
@@ -214,30 +243,26 @@ export const NavBar = () => {
             </div>
 
             <Link
-              href="/enquiries"
-              className={`px-3 py-1.5 rounded-full text-sm font-medium tracking-wide transition-all ${
-                pathname === "/enquiries"
-                  ? "text-cyan-300 bg-cyan-500/15 border border-cyan-400/30 text-cyber-subtle"
-                  : "text-slate-300 hover:text-cyan-200 hover:bg-white/5"
+              href="#enquiries"
+              onClick={(e) => handleNavClick(e, "enquiries")}
+              className={`px-4 py-2 rounded-full text-sm font-medium tracking-wide transition-all ${
+                activeSection === "enquiries"
+                  ? "text-white bg-white/10"
+                  : "text-slate-400 hover:text-white hover:bg-white/5"
               }`}
             >
               Enquiries
             </Link>
           </div>
 
-          {/* ACTION BUTTON & SYSTEM STATUS */}
-          <div className="hidden sm:flex items-center gap-3">
-            <div className="hidden lg:flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-950/40 border border-cyan-500/20 text-[11px] font-mono text-cyan-300">
-              <span className="w-2 h-2 rounded-full bg-[#00f0ff] animate-pulse" />
-              <span>SYSTEMS ONLINE</span>
-            </div>
-
+          {/* ACTION BUTTON */}
+          <div className="hidden sm:flex items-center gap-4">
             <Link
-              href="/enquiries"
-              className="relative inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider text-black bg-gradient-to-r from-cyan-400 to-cyan-200 hover:from-cyan-300 hover:to-white transition-all shadow-[0_0_20px_rgba(0,240,255,0.4)] hover:shadow-[0_0_25px_rgba(0,240,255,0.7)] cursor-pointer"
+              href="#enquiries"
+              onClick={(e) => handleNavClick(e, "enquiries")}
+              className="relative inline-flex items-center gap-2 px-6 py-2.5 rounded-full text-xs font-semibold uppercase tracking-widest text-black bg-white hover:bg-slate-200 transition-all shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:shadow-[0_0_30px_rgba(255,255,255,0.2)] cursor-pointer cyber-btn"
             >
               <span>Connect</span>
-              <ArrowRight className="w-3.5 h-3.5" />
             </Link>
           </div>
 
@@ -245,10 +270,10 @@ export const NavBar = () => {
           <button
             type="button"
             onClick={() => setIsMobileOpen(!isMobileOpen)}
-            className="md:hidden p-2 rounded-full text-slate-300 hover:text-white bg-white/5 hover:bg-white/10 border border-cyan-500/20 focus:outline-none"
+            className="md:hidden p-2 rounded-full text-slate-300 hover:text-white bg-white/5 hover:bg-white/10 border border-white/10 focus:outline-none"
             aria-label="Toggle navigation menu"
           >
-            {isMobileOpen ? <X className="w-5 h-5 text-cyan-400" /> : <Menu className="w-5 h-5" />}
+            {isMobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
         </nav>
       </header>
@@ -261,24 +286,26 @@ export const NavBar = () => {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.25 }}
-            className="fixed inset-x-4 top-20 z-40 md:hidden bg-[#030910]/95 backdrop-blur-2xl border border-cyan-400/30 rounded-3xl p-5 shadow-[0_25px_60px_rgba(0,0,0,0.9),0_0_40px_rgba(0,240,255,0.2)] max-h-[80vh] overflow-y-auto"
+            className="fixed inset-x-4 top-24 z-40 md:hidden bg-[#0a0a0a]/95 backdrop-blur-3xl border border-white/10 rounded-[2rem] p-6 shadow-[0_30px_60px_rgba(0,0,0,0.9)] max-h-[80vh] overflow-y-auto"
           >
             <div className="flex flex-col gap-2">
               <Link
-                href="/"
-                className={`p-3 rounded-xl text-base font-medium transition-colors ${
-                  pathname === "/" ? "bg-cyan-500/20 text-cyan-300 font-semibold" : "text-slate-200 hover:bg-white/5"
+                href="#home"
+                onClick={(e) => handleNavClick(e, "home")}
+                className={`p-4 rounded-2xl text-base font-medium transition-colors ${
+                  activeSection === "home" ? "bg-white/10 text-white font-semibold" : "text-slate-300 hover:bg-white/5"
                 }`}
               >
                 Home
               </Link>
 
               <Link
-                href="/about"
-                className={`p-3 rounded-xl text-base font-medium transition-colors ${
-                  pathname === "/about" || pathname === "/about-us"
-                    ? "bg-cyan-500/20 text-cyan-300 font-semibold"
-                    : "text-slate-200 hover:bg-white/5"
+                href="#about"
+                onClick={(e) => handleNavClick(e, "about")}
+                className={`p-4 rounded-2xl text-base font-medium transition-colors ${
+                  activeSection === "about"
+                    ? "bg-white/10 text-white font-semibold"
+                    : "text-slate-300 hover:bg-white/5"
                 }`}
               >
                 About
@@ -289,28 +316,29 @@ export const NavBar = () => {
                 <button
                   type="button"
                   onClick={() => setIsMobileProductsOpen(!isMobileProductsOpen)}
-                  className={`flex items-center justify-between p-3 rounded-xl text-base font-medium transition-colors ${
-                    isProductsActive ? "bg-cyan-500/20 text-cyan-300" : "text-slate-200 hover:bg-white/5"
+                  className={`flex items-center justify-between p-4 rounded-2xl text-base font-medium transition-colors ${
+                    isProductsActive ? "bg-white/10 text-white" : "text-slate-300 hover:bg-white/5"
                   }`}
                 >
                   <span>Products</span>
                   <ChevronDown
                     className={`w-4 h-4 transition-transform duration-200 ${
-                      isMobileProductsOpen ? "rotate-180 text-cyan-300" : "text-slate-400"
+                      isMobileProductsOpen ? "rotate-180 text-white" : "text-slate-500"
                     }`}
                   />
                 </button>
 
                 {isMobileProductsOpen && (
-                  <div className="ml-4 pl-3 border-l border-cyan-500/30 flex flex-col gap-1 mt-1">
+                  <div className="ml-4 pl-4 border-l border-white/10 flex flex-col gap-2 mt-2 mb-2">
                     <Link
-                      href="/products/hardware"
-                      className="flex items-center gap-2 p-2.5 rounded-lg text-sm text-slate-300 hover:text-cyan-300 hover:bg-cyan-500/10"
+                      href="#hardware"
+                      onClick={(e) => handleNavClick(e, "hardware")}
+                      className="flex items-center gap-3 p-3 rounded-xl text-sm text-slate-300 hover:text-white hover:bg-white/5"
                     >
-                      <Cpu className="w-4 h-4 text-cyan-400" />
+                      <Cpu className="w-5 h-5 text-slate-400" />
                       <div>
-                        <div className="font-semibold">Hardware Products</div>
-                        <div className="text-[11px] text-slate-400">Blob Desktop Companion (Coming Soon)</div>
+                        <div className="font-medium">Hardware Products</div>
+                        <div className="text-[11px] text-slate-500 font-light mt-0.5">Blob Desktop Companion</div>
                       </div>
                     </Link>
                   </div>
@@ -322,28 +350,29 @@ export const NavBar = () => {
                 <button
                   type="button"
                   onClick={() => setIsMobileServicesOpen(!isMobileServicesOpen)}
-                  className={`flex items-center justify-between p-3 rounded-xl text-base font-medium transition-colors ${
-                    isServicesActive ? "bg-cyan-500/20 text-cyan-300" : "text-slate-200 hover:bg-white/5"
+                  className={`flex items-center justify-between p-4 rounded-2xl text-base font-medium transition-colors ${
+                    isServicesActive ? "bg-white/10 text-white" : "text-slate-300 hover:bg-white/5"
                   }`}
                 >
                   <span>Services</span>
                   <ChevronDown
                     className={`w-4 h-4 transition-transform duration-200 ${
-                      isMobileServicesOpen ? "rotate-180 text-cyan-300" : "text-slate-400"
+                      isMobileServicesOpen ? "rotate-180 text-white" : "text-slate-500"
                     }`}
                   />
                 </button>
 
                 {isMobileServicesOpen && (
-                  <div className="ml-4 pl-3 border-l border-cyan-500/30 flex flex-col gap-1 mt-1">
+                  <div className="ml-4 pl-4 border-l border-white/10 flex flex-col gap-2 mt-2 mb-2">
                     <Link
-                      href="/services/software-solutions"
-                      className="flex items-center gap-2 p-2.5 rounded-lg text-sm text-slate-300 hover:text-cyan-300 hover:bg-cyan-500/10"
+                      href="#software"
+                      onClick={(e) => handleNavClick(e, "software")}
+                      className="flex items-center gap-3 p-3 rounded-xl text-sm text-slate-300 hover:text-white hover:bg-white/5"
                     >
-                      <Code2 className="w-4 h-4 text-cyan-400" />
+                      <Code2 className="w-5 h-5 text-slate-400" />
                       <div>
-                        <div className="font-semibold">Software solutions</div>
-                        <div className="text-[11px] text-slate-400">Web, Apps, UI/UX & Graphic Design</div>
+                        <div className="font-medium">Software Solutions</div>
+                        <div className="text-[11px] text-slate-500 font-light mt-0.5">Web, Apps, UI/UX & Design</div>
                       </div>
                     </Link>
                   </div>
@@ -351,18 +380,20 @@ export const NavBar = () => {
               </div>
 
               <Link
-                href="/enquiries"
-                className={`p-3 rounded-xl text-base font-medium transition-colors ${
-                  pathname === "/enquiries" ? "bg-cyan-500/20 text-cyan-300 font-semibold" : "text-slate-200 hover:bg-white/5"
+                href="#enquiries"
+                onClick={(e) => handleNavClick(e, "enquiries")}
+                className={`p-4 rounded-2xl text-base font-medium transition-colors ${
+                  activeSection === "enquiries" ? "bg-white/10 text-white font-semibold" : "text-slate-300 hover:bg-white/5"
                 }`}
               >
                 Enquiries
               </Link>
 
-              <div className="pt-3 mt-2 border-t border-cyan-500/20 flex flex-col gap-3">
+              <div className="pt-4 mt-2 border-t border-white/10">
                 <Link
-                  href="/enquiries"
-                  className="w-full py-3 rounded-xl bg-gradient-to-r from-cyan-400 to-cyan-200 text-black font-semibold text-center text-sm uppercase tracking-wider shadow-[0_0_20px_rgba(0,240,255,0.4)]"
+                  href="#enquiries"
+                  onClick={(e) => handleNavClick(e, "enquiries")}
+                  className="w-full py-4 rounded-2xl bg-white text-black font-semibold text-center text-sm uppercase tracking-widest shadow-[0_0_20px_rgba(255,255,255,0.1)] block"
                 >
                   Initiate Enquiry
                 </Link>

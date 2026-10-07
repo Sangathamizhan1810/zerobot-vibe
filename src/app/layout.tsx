@@ -1,11 +1,19 @@
 import type { Metadata, Viewport } from "next";
+import { Inter, Outfit, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
+import { CustomCursor } from "@/components/ui/CustomCursor";
 import { NavBar } from "@/components/layout/NavBar";
 import { SOCIAL_LINKS } from "@/data/socials";
+import { SmoothScrollProvider } from "@/components/layout/SmoothScrollProvider";
+import { ThreeBackground } from "@/components/graphic/ThreeBackground";
 import icon32 from "@/assets/icon/zerobots-32x32.png";
 import icon16 from "@/assets/icon/zerobots-16x16.png";
 import appleIcon from "@/assets/icon/zerobots-180x180.png";
 import icon512 from "@/assets/icon/zerobots-512x512.png";
+
+const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
+const outfit = Outfit({ subsets: ["latin"], variable: "--font-outfit" });
+const jetbrainsMono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-mono" });
 
 // Base URL resolves dynamically: checks Vercel deployment variables, falling back to localhost
 const siteBaseUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL
@@ -15,7 +23,7 @@ const siteBaseUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL
   : `http://localhost:${process.env.PORT || 3000}`;
 
 export const viewport: Viewport = {
-  themeColor: "#020609",
+  themeColor: "#000000",
   width: "device-width",
   initialScale: 1,
   maximumScale: 5,
@@ -99,6 +107,8 @@ export const metadata: Metadata = {
   },
 };
 
+import { PosterBackground } from "@/components/graphic/PosterBackground";
+
 export default function RootLayout({
   children,
 }: {
@@ -118,19 +128,32 @@ export default function RootLayout({
   };
 
   return (
-    <html lang="en" className="dark bg-[#020609]" data-scroll-behavior="smooth">
+    <html lang="en" className={`dark ${inter.variable} ${outfit.variable} ${jetbrainsMono.variable} font-sans`} data-scroll-behavior="smooth">
       <head>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </head>
-      <body className="bg-[#020609] text-white min-h-screen antialiased selection:bg-cyan-500 selection:text-black">
-        {/* Floating Top Navbar */}
-        <NavBar />
+      <body className="bg-[#000000] text-white min-h-screen antialiased selection:bg-white selection:text-black font-sans">
+        <SmoothScrollProvider>
+          {/* Global Immersive Poster Layer */}
+          <div className="fixed inset-0 z-0 pointer-events-none">
+            <PosterBackground variant="default" />
+          </div>
 
-        {/* Dynamic Page Content */}
-        <main>{children}</main>
+          {/* Immersive 3D Background */}
+          <ThreeBackground />
+
+          {/* Custom Trailing Cursor */}
+          <CustomCursor />
+
+          {/* Floating Top Navbar */}
+          <NavBar />
+
+          {/* Dynamic Page Content */}
+          <main className="relative z-10">{children}</main>
+        </SmoothScrollProvider>
       </body>
     </html>
   );

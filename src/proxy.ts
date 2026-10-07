@@ -6,24 +6,33 @@ export function proxy(request: NextRequest) {
   const normalizedPath = pathname.length > 1 ? pathname.replace(/\/$/, "") : pathname;
 
   // 1. Canonical URL Redirects (308 Permanent)
-  if (normalizedPath === "/about-us") {
-    return NextResponse.redirect(new URL("/about", request.url), 308);
+  if (normalizedPath === "/about" || normalizedPath === "/about-us") {
+    return NextResponse.redirect(new URL("/#about", request.url), 308);
   }
 
-  if (normalizedPath === "/contact" || normalizedPath === "/inquiries") {
-    return NextResponse.redirect(new URL("/enquiries", request.url), 308);
+  if (
+    normalizedPath === "/contact" ||
+    normalizedPath === "/inquiries" ||
+    normalizedPath === "/enquiries"
+  ) {
+    return NextResponse.redirect(new URL("/#enquiries", request.url), 308);
   }
 
-  if (normalizedPath === "/products" || normalizedPath === "/products/hardware/blob") {
-    return NextResponse.redirect(new URL("/products/hardware", request.url), 308);
+  if (
+    normalizedPath === "/products" ||
+    normalizedPath === "/products/hardware" ||
+    normalizedPath === "/products/hardware/blob"
+  ) {
+    return NextResponse.redirect(new URL("/#hardware", request.url), 308);
   }
 
   if (
     normalizedPath === "/services" ||
     normalizedPath === "/products/software" ||
-    normalizedPath === "/software"
+    normalizedPath === "/software" ||
+    normalizedPath === "/services/software-solutions"
   ) {
-    return NextResponse.redirect(new URL("/services/software-solutions", request.url), 308);
+    return NextResponse.redirect(new URL("/#software", request.url), 308);
   }
 
   // 2. CORS Handling for API Routes (/api/*)

@@ -1,0 +1,3 @@
+@echo off
+echo Starting Next.js Server...
+pnpm run dev

@@ -93,3 +93,5 @@ $RECYCLE.BIN/
 tmp/
 temp/
 .cache/
+.vinext/
+.cloudflare/

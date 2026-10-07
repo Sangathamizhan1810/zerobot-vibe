@@ -1,21 +1,31 @@
 @import "tailwindcss";
 
-:root {
-  --background: #020609;
-  --foreground: #f0fdf4;
-  --cyber-cyan: #00f0ff;
-  --cyber-cyan-dark: #008899;
-  --cyber-navy: #040e17;
+@theme {
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-outfit), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-mono), ui-monospace, SFMono-Regular, monospace;
+  
+  --color-background: #050505;
+  --color-surface: #0a0a0a;
+  --color-surface-elevated: #111111;
+  --color-foreground: #f0fdf4;
+  --color-cyber-cyan: #00f0ff;
+  --color-cyber-cyan-dark: #008899;
 }
 
 html {
   scroll-behavior: smooth;
+  background-color: #050505;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
 }
 
 html, body {
-  background: #020609;
+  background: #050505;
   color: #f1f5f9;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-family: var(--font-sans);
   overflow-x: hidden;
   min-height: 100%;
   width: 100%;
@@ -25,87 +35,75 @@ html, body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-.snap-container {
-  overflow-x: hidden !important;
-  max-width: 100vw;
-}
-
-/* Sleek Cyber Dark Scrollbar */
+/* Sophisticated Cyber Scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #020609;
+  background: #050505;
 }
 ::-webkit-scrollbar-thumb {
-  background: #0c2538;
+  background: #1a1a1a;
   border-radius: 4px;
-  border: 1px solid rgba(0, 240, 255, 0.2);
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #00d2e0;
-  box-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
+  background: #333333;
 }
 
 * {
   scrollbar-width: thin;
-  scrollbar-color: #0c2538 #020609;
+  scrollbar-color: #1a1a1a #050505;
 }
 
-/* Custom Cyber Glassmorphism */
+/* Premium Doppelrand (Double-Bezel) Glassmorphism */
 .cyber-glass {
-  background: rgba(4, 14, 23, 0.7);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(0, 240, 255, 0.2);
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.6), inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+  background: rgba(255, 255, 255, 0.02);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 18px 60px rgba(0, 0, 0, 0.4);
+}
+
+.cyber-glass-inner {
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: calc(2rem - 0.5rem);
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.05);
 }
 
 .cyber-glass-interactive {
-  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.7s cubic-bezier(0.32, 0.72, 0, 1);
 }
 .cyber-glass-interactive:hover {
-  background: rgba(6, 20, 33, 0.85);
-  border-color: rgba(0, 240, 255, 0.5);
-  box-shadow: 0 0 35px rgba(0, 240, 255, 0.25), inset 0 0 15px rgba(0, 240, 255, 0.1);
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(0, 240, 255, 0.2);
   transform: translateY(-2px);
 }
 
-/* Cyber Glows */
+/* Cyber Glows - More restrained */
 .cyber-glow {
-  box-shadow: 0 0 20px rgba(0, 240, 255, 0.35);
-}
-
-.cyber-glow-lg {
-  box-shadow: 0 0 45px rgba(0, 240, 255, 0.45);
+  box-shadow: 0 0 20px rgba(0, 240, 255, 0.15);
 }
 
 .text-cyber-glow {
-  text-shadow: 0 0 20px rgba(0, 240, 255, 0.75), 0 0 40px rgba(0, 240, 255, 0.35);
+  text-shadow: 0 0 15px rgba(0, 240, 255, 0.4);
 }
 
 .text-cyber-subtle {
-  text-shadow: 0 0 10px rgba(0, 240, 255, 0.4);
+  text-shadow: 0 0 10px rgba(0, 240, 255, 0.2);
 }
 
 /* Cyber Gradients */
 .cyber-gradient-text {
-  background: linear-gradient(135deg, #ffffff 20%, #70eeff 60%, #00d2e0 100%);
+  background: linear-gradient(135deg, #ffffff 30%, #70eeff 80%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
-.cyber-badge {
-  background: linear-gradient(135deg, rgba(0, 240, 255, 0.12), rgba(0, 60, 90, 0.25));
-  border: 1px solid rgba(0, 240, 255, 0.35);
-  box-shadow: 0 0 15px rgba(0, 240, 255, 0.15);
-}
-
-/* High-tech button */
+/* High-tech button (Magnetic style handled in React) */
 .cyber-btn {
   position: relative;
   overflow: hidden;
-  transition: all 0.3s ease;
+  transition: all 0.5s cubic-bezier(0.32, 0.72, 0, 1);
 }
 .cyber-btn::before {
   content: "";
@@ -114,43 +112,27 @@ html, body {
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(0, 240, 255, 0.4), transparent);
-  transition: all 0.6s ease;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  transition: all 0.7s cubic-bezier(0.32, 0.72, 0, 1);
 }
 .cyber-btn:hover::before {
   left: 100%;
 }
 
-/* Animated scanner line */
+/* Utility Animations */
 @keyframes cyberScan {
-  0% {
-    transform: translateY(-100%);
-    opacity: 0;
-  }
-  50% {
-    opacity: 0.6;
-  }
-  100% {
-    transform: translateY(1000%);
-    opacity: 0;
-  }
+  0% { transform: translateY(-100%); opacity: 0; }
+  50% { opacity: 0.3; }
+  100% { transform: translateY(1000%); opacity: 0; }
 }
-
 .animate-cyber-scan {
-  animation: cyberScan 6s ease-in-out infinite;
+  animation: cyberScan 8s ease-in-out infinite;
 }
 
-@keyframes pulseGlow {
-  0%, 100% {
-    opacity: 0.3;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 0.7;
-    transform: scale(1.05);
-  }
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
 }
-
-.animate-pulse-glow {
-  animation: pulseGlow 4s ease-in-out infinite;
+.animate-float {
+  animation: float 6s ease-in-out infinite;
 }

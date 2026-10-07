@@ -1,0 +1,21 @@
+import { defineConfig } from "vite";
+import vinext from "vinext";
+import { cloudflare } from "@cloudflare/vite-plugin";
+import { workersCacheCdnAdapter } from "@vinext/cloudflare/cache/workers-cache-cdn-adapter";
+import { imagesOptimizer } from "@vinext/cloudflare/images/images-optimizer";
+
+export default defineConfig({
+  plugins: [
+    vinext({
+      cache: { cdn: workersCacheCdnAdapter() },
+      images: { optimizer: imagesOptimizer() },
+      react: { compiler: true },
+    }),
+    cloudflare({
+      viteEnvironment: {
+        name: "rsc",
+        childEnvironments: ["ssr"],
+      },
+    }),
+  ],
+});

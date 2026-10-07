@@ -30,11 +30,13 @@ export const SnapSection = ({
 
     const observer = new IntersectionObserver(
       ([entry]) => {
-        setIsInView(entry.isIntersecting);
+        if (entry.isIntersecting) {
+          setIsInView(true);
+        }
       },
       {
-        threshold: 0.25,
-        root: el.closest(".snap-container") || null,
+        threshold: 0.15,
+        rootMargin: "0px 0px -10% 0px"
       }
     );
 
@@ -46,7 +48,7 @@ export const SnapSection = ({
     <section
       id={id}
       ref={sectionRef}
-      className={`relative w-full max-w-full min-h-[100dvh] snap-start snap-always flex flex-col items-center justify-between overflow-x-hidden shrink-0 select-text ${className}`}
+      className={`relative w-full max-w-full min-h-[100dvh] flex flex-col items-center justify-between overflow-x-hidden shrink-0 select-text ${className}`}
     >
       {/* Background Graphic Layer */}
       {backgroundElement && (
@@ -57,10 +59,10 @@ export const SnapSection = ({
 
       {/* Main Content with Smooth Fade In on Scroll In, Fade Out on Scroll Out */}
       <div
-        className={`relative z-10 w-full max-w-full flex-1 flex flex-col items-center justify-center px-4 sm:px-6 md:px-8 lg:px-12 pt-20 sm:pt-24 pb-8 sm:pb-12 transition-all duration-700 ease-out select-text ${
+        className={`relative z-10 w-full max-w-full flex-1 flex flex-col items-center justify-center px-4 sm:px-6 md:px-8 lg:px-12 pt-32 sm:pt-40 pb-20 sm:pb-24 transition-all duration-1000 ease-[cubic-bezier(0.22,1,0.36,1)] select-text ${
           isInView
             ? "opacity-100 translate-y-0 filter-none pointer-events-auto scale-100"
-            : "opacity-0 translate-y-8 blur-[2px] pointer-events-none scale-[0.98]"
+            : "opacity-0 translate-y-12 blur-[4px] pointer-events-none scale-[0.97]"
         }`}
       >
         <div className="w-full max-w-7xl mx-auto flex flex-col items-center justify-center">
@@ -70,7 +72,7 @@ export const SnapSection = ({
 
       {/* Footer attached directly as the end part of the last section */}
       {isLastSection && footer && (
-        <div className="relative z-20 w-full max-w-full shrink-0 pointer-events-auto">
+        <div className="relative z-20 w-full max-w-full shrink-0 pointer-events-auto mt-20">
           {footer}
         </div>
       )}
@@ -112,7 +114,7 @@ export const SnapContainer = ({ children, className = "" }: SnapContainerProps) 
   return (
     <div
       ref={containerRef}
-      className={`snap-container fixed inset-0 w-full max-w-full h-[100dvh] overflow-x-hidden overflow-y-auto snap-y snap-mandatory overscroll-y-none bg-[#020609] select-none ${className}`}
+      className={`relative w-full max-w-full bg-transparent overflow-x-hidden ${className}`}
     >
       {children}
     </div>

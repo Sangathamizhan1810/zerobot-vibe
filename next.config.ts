@@ -1,8 +1,11 @@
 import type { NextConfig } from "next";
 
+const isViteBuild = process.argv.some((arg) => arg.includes("vite"));
+const useNodeStandalone = !process.env.VERCEL && !isViteBuild;
+
 const nextConfig: NextConfig = {
-  output: process.env.VERCEL ? undefined : "standalone", // Keep this for standard Node hosting and vercel support
-  distDir: process.env.VERCEL ? undefined : "build",
+  output: useNodeStandalone ? "standalone" : undefined,
+  distDir: useNodeStandalone ? "build" : undefined,
   // Allow hot reload (HMR) when testing on mobile devices via hotspot or LAN
   allowedDevOrigins: [
     "192.168.137.1",
@@ -28,33 +31,53 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [
       {
+        source: "/about",
+        destination: "/#about",
+        permanent: true,
+      },
+      {
         source: "/about-us",
-        destination: "/about",
+        destination: "/#about",
         permanent: true,
       },
       {
         source: "/contact",
-        destination: "/enquiries",
+        destination: "/#enquiries",
         permanent: true,
       },
       {
         source: "/inquiries",
-        destination: "/enquiries",
+        destination: "/#enquiries",
+        permanent: true,
+      },
+      {
+        source: "/enquiries",
+        destination: "/#enquiries",
         permanent: true,
       },
       {
         source: "/products",
-        destination: "/products/hardware",
+        destination: "/#hardware",
+        permanent: true,
+      },
+      {
+        source: "/products/hardware",
+        destination: "/#hardware",
         permanent: true,
       },
       {
         source: "/products/software",
-        destination: "/services/software-solutions",
+        destination: "/#software",
         permanent: true,
       },
       {
         source: "/services",
-        destination: "/services/software-solutions",
+        destination: "/#software",
+        permanent: true,
+      },
+      {
+        source: "/services/software-solutions",
+        destination: "/#software",
         permanent: true,
       },
     ];
