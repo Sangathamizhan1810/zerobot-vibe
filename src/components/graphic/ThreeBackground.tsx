@@ -1,14 +1,28 @@
 "use client";
 
-import { useRef, useMemo, useState, useEffect } from "react";
-import { Canvas, useFrame } from "@react-three/fiber";
+import { useRef, useMemo, useState, useEffect, useLayoutEffect } from "react";
+import { Canvas, useFrame, useThree } from "@react-three/fiber";
+import { THEME_COLORS, THEME_EVENT, readDomTheme, type Theme } from "@/lib/theme";
 import * as THREE from "three";
 import { Float } from "@react-three/drei";
 
 /* ─────────────────────────────────────────────
    Creative: Morphing Data Swarm
    ───────────────────────────────────────────── */
-function DataSwarm() {
+function SceneFog({ theme }: { theme: Theme }) {
+  const { scene } = useThree();
+
+  useEffect(() => {
+    scene.fog = new THREE.Fog(THEME_COLORS[theme], 6, 25);
+    return () => {
+      scene.fog = null;
+    };
+  }, [scene, theme]);
+
+  return null;
+}
+
+function DataSwarm({ theme }: { theme: Theme }) {
   const pointsRef = useRef<THREE.Points>(null);
   
   const PARTICLE_COUNT = 4000;
@@ -130,6 +144,7 @@ function DataSwarm() {
         <bufferGeometry>
           <bufferAttribute
             attach="attributes-position"
+            args={[positions, 3]}
             count={positions.length / 3}
             array={positions}
             itemSize={3}
@@ -137,12 +152,13 @@ function DataSwarm() {
         </bufferGeometry>
         {/* Lower opacity and size so it sits quietly in the background */}
         <pointsMaterial
+          key={theme}
           size={0.035}
-          color="#00f0ff"
+          color={theme === "light" ? "#0b7c8e" : "#00f0ff"}
           transparent
-          opacity={0.18}
+          opacity={theme === "light" ? 0.42 : 0.18}
           sizeAttenuation
-          blending={THREE.AdditiveBlending}
+          blending={theme === "light" ? THREE.NormalBlending : THREE.AdditiveBlending}
           depthWrite={false}
         />
       </points>
@@ -154,14 +170,27 @@ function DataSwarm() {
    Main exported component
    ───────────────────────────────────────────── */
 export function ThreeBackground() {
+  const [theme, setTheme] = useState<Theme>("dark");
+
+  useLayoutEffect(() => {
+    const sync = () => setTheme(readDomTheme());
+    sync();
+    const onTheme = (event: Event) => {
+      const detail = (event as CustomEvent<Theme>).detail;
+      setTheme(detail === "light" || detail === "dark" ? detail : readDomTheme());
+    };
+    window.addEventListener(THEME_EVENT, onTheme);
+    return () => window.removeEventListener(THEME_EVENT, onTheme);
+  }, []);
+
   return (
     <div className="fixed inset-0 w-full h-full z-[1] pointer-events-none opacity-90">
       <Canvas
         camera={{ position: [0, 0, 5], fov: 60 }}
         gl={{ antialias: true, alpha: true }}
       >
-        <fog attach="fog" args={["#000000", 6, 25]} />
-        <DataSwarm />
+        <SceneFog theme={theme} />
+        <DataSwarm theme={theme} />
       </Canvas>
     </div>
   );

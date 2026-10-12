@@ -98,7 +98,7 @@ export const ZeroBotsLogo = ({
                 className={`${dimensions.text} text-white tracking-widest leading-tight ${useBrandFont ? `${zeroBotsFont.className} font-normal` : "font-black font-mono"
                   }`}
               >
-                ZER<span className="text-[#00f0ff] drop-shadow-[0_0_10px_#00f0ff]">O</span>BOTS
+                ZER<span className="brand-cyan text-[#00f0ff] drop-shadow-[0_0_10px_#00f0ff]">O</span>BOTS
               </span>
             </div>
           </div>

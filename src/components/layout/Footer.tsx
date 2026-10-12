@@ -81,7 +81,7 @@ export const Footer = () => {
   };
 
   return (
-    <footer className="w-full bg-[#050505]/95 backdrop-blur-xl border-t border-white/10 text-slate-300 relative z-20 overflow-hidden">
+    <footer className="w-full bg-canvas/95 backdrop-blur-xl border-t border-white/10 text-slate-300 relative z-20 overflow-hidden">
       {/* Main Footer Container */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 sm:pt-16 pb-8 sm:pb-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 lg:gap-8 pb-10 sm:pb-12 border-b border-white/10">

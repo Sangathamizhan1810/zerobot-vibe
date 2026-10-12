@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { Cpu, Code2, ChevronDown, Menu, X, ArrowRight } from "lucide-react";
 import { ZeroBotsLogo } from "@/components/graphic/ZeroBotsLogo";
+import { ThemeToggle } from "@/components/theme/ThemeToggle";
 
 export const NavBar = () => {
   const pathname = usePathname();
@@ -74,7 +75,7 @@ export const NavBar = () => {
         <nav
           className={`pointer-events-auto w-full max-w-6xl transition-all duration-500 rounded-full px-4 sm:px-6 py-3 flex items-center justify-between border ${
             scrolled
-              ? "bg-[#050505]/80 backdrop-blur-2xl border-white/10 shadow-[0_10px_40px_rgba(0,0,0,0.8)]"
+              ? "bg-canvas/80 backdrop-blur-2xl border-white/10 shadow-[0_10px_40px_rgba(0,0,0,0.8)]"
               : "bg-transparent border-transparent"
           }`}
         >
@@ -88,7 +89,7 @@ export const NavBar = () => {
           </Link>
 
           {/* DESKTOP NAVIGATION LINKS */}
-          <div className={`hidden md:flex items-center gap-1 lg:gap-2 p-1.5 rounded-full ${scrolled ? '' : 'bg-[#050505]/40 backdrop-blur-md border border-white/5'}`}>
+          <div className={`hidden md:flex items-center gap-1 lg:gap-2 p-1.5 rounded-full ${scrolled ? '' : 'bg-canvas/40 backdrop-blur-md border border-white/5'}`}>
             <Link
               href="#home"
               onClick={(e) => handleNavClick(e, "home")}
@@ -146,7 +147,7 @@ export const NavBar = () => {
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: 8, scale: 0.96 }}
                     transition={{ duration: 0.2, ease: "easeOut" }}
-                    className="absolute top-full left-1/2 -translate-x-1/2 mt-4 w-80 p-3 rounded-[1.5rem] bg-[#0a0a0a]/95 backdrop-blur-3xl border border-white/10 shadow-[0_20px_60px_rgba(0,0,0,0.8)] z-50 pointer-events-auto"
+                    className="absolute top-full left-1/2 -translate-x-1/2 mt-4 w-80 p-3 rounded-[1.5rem] bg-panel/95 backdrop-blur-3xl border border-white/10 shadow-[0_20px_60px_rgba(0,0,0,0.8)] z-50 pointer-events-auto"
                   >
                     <div className="text-[10px] uppercase font-mono tracking-widest text-slate-500 px-3 py-2 border-b border-white/5 flex items-center justify-between mb-2">
                       <span>Robotics Hardware</span>
@@ -211,7 +212,7 @@ export const NavBar = () => {
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: 8, scale: 0.96 }}
                     transition={{ duration: 0.2, ease: "easeOut" }}
-                    className="absolute top-full left-1/2 -translate-x-1/2 mt-4 w-84 p-3 rounded-[1.5rem] bg-[#0a0a0a]/95 backdrop-blur-3xl border border-white/10 shadow-[0_20px_60px_rgba(0,0,0,0.8)] z-50 pointer-events-auto"
+                    className="absolute top-full left-1/2 -translate-x-1/2 mt-4 w-84 p-3 rounded-[1.5rem] bg-panel/95 backdrop-blur-3xl border border-white/10 shadow-[0_20px_60px_rgba(0,0,0,0.8)] z-50 pointer-events-auto"
                   >
                     <div className="text-[10px] uppercase font-mono tracking-widest text-slate-500 px-3 py-2 border-b border-white/5 flex items-center justify-between mb-2">
                       <span>Digital Engineering</span>
@@ -255,26 +256,24 @@ export const NavBar = () => {
             </Link>
           </div>
 
-          {/* ACTION BUTTON */}
-          <div className="hidden sm:flex items-center gap-4">
+          <div className="flex items-center gap-2 sm:gap-3">
+            <ThemeToggle />
             <Link
               href="#enquiries"
               onClick={(e) => handleNavClick(e, "enquiries")}
-              className="relative inline-flex items-center gap-2 px-6 py-2.5 rounded-full text-xs font-semibold uppercase tracking-widest text-black bg-white hover:bg-slate-200 transition-all shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:shadow-[0_0_30px_rgba(255,255,255,0.2)] cursor-pointer cyber-btn"
+              className="hidden sm:inline-flex relative items-center gap-2 px-6 py-2.5 rounded-full text-xs font-semibold uppercase tracking-widest text-black bg-white hover:bg-slate-200 transition-all shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:shadow-[0_0_30px_rgba(255,255,255,0.2)] cursor-pointer cyber-btn"
             >
               <span>Connect</span>
             </Link>
+            <button
+              type="button"
+              onClick={() => setIsMobileOpen(!isMobileOpen)}
+              className="md:hidden p-2 rounded-full text-slate-300 hover:text-white bg-white/5 hover:bg-white/10 border border-white/10 focus:outline-none"
+              aria-label="Toggle navigation menu"
+            >
+              {isMobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            </button>
           </div>
-
-          {/* MOBILE HAMBURGER BUTTON */}
-          <button
-            type="button"
-            onClick={() => setIsMobileOpen(!isMobileOpen)}
-            className="md:hidden p-2 rounded-full text-slate-300 hover:text-white bg-white/5 hover:bg-white/10 border border-white/10 focus:outline-none"
-            aria-label="Toggle navigation menu"
-          >
-            {isMobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-          </button>
         </nav>
       </header>
 
@@ -286,7 +285,7 @@ export const NavBar = () => {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.25 }}
-            className="fixed inset-x-4 top-24 z-40 md:hidden bg-[#0a0a0a]/95 backdrop-blur-3xl border border-white/10 rounded-[2rem] p-6 shadow-[0_30px_60px_rgba(0,0,0,0.9)] max-h-[80vh] overflow-y-auto"
+            className="fixed inset-x-4 top-24 z-40 md:hidden bg-panel/95 backdrop-blur-3xl border border-white/10 rounded-[2rem] p-6 shadow-[0_30px_60px_rgba(0,0,0,0.9)] max-h-[80vh] overflow-y-auto"
           >
             <div className="flex flex-col gap-2">
               <Link

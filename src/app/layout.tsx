@@ -108,6 +108,8 @@ export const metadata: Metadata = {
 };
 
 import { PosterBackground } from "@/components/graphic/PosterBackground";
+import { ThemeSync } from "@/components/theme/ThemeSync";
+import { themeInitScript } from "@/lib/theme";
 
 export default function RootLayout({
   children,
@@ -128,14 +130,16 @@ export default function RootLayout({
   };
 
   return (
-    <html lang="en" className={`dark ${inter.variable} ${outfit.variable} ${jetbrainsMono.variable} font-sans`} data-scroll-behavior="smooth">
+    <html lang="en" suppressHydrationWarning className={`dark ${inter.variable} ${outfit.variable} ${jetbrainsMono.variable} font-sans`} data-scroll-behavior="smooth">
       <head>
+        <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </head>
-      <body className="bg-[#000000] text-white min-h-screen antialiased selection:bg-white selection:text-black font-sans">
+      <body className="bg-void text-white min-h-screen antialiased selection:bg-white selection:text-black font-sans">
+        <ThemeSync />
         <SmoothScrollProvider>
           {/* Global Immersive Poster Layer */}
           <div className="fixed inset-0 z-0 pointer-events-none">

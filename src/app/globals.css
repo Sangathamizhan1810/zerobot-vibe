@@ -11,11 +11,49 @@
   --color-foreground: #f0fdf4;
   --color-cyber-cyan: #00f0ff;
   --color-cyber-cyan-dark: #008899;
+  --color-void: #000000;
+  --color-canvas: #050505;
+  --color-panel: #0a0a0a;
+  --color-vignette: #020609;
+}
+
+:root {
+  --zb-page: #050505;
+  --zb-ink: #f1f5f9;
+  --zb-scrollbar: #1a1a1a;
+  --zb-scrollbar-hover: #333333;
+  color-scheme: dark;
+}
+
+html.light {
+  color-scheme: light;
+  --zb-page: #f2f5f6;
+  --zb-ink: #10171b;
+  --zb-scrollbar: #c5d0d4;
+  --zb-scrollbar-hover: #8ea0a6;
+  --color-void: #f2f5f6;
+  --color-canvas: #ffffff;
+  --color-panel: #ffffff;
+  --color-vignette: #f2f5f6;
+  --color-background: #f2f5f6;
+  --color-surface: #ffffff;
+  --color-surface-elevated: #e7eef0;
+  --color-foreground: #10171b;
+  --color-white: #10171b;
+  --color-slate-200: #243036;
+  --color-slate-300: #3c4a52;
+  --color-slate-400: #54636c;
+  --color-slate-500: #6d7c84;
+  --color-slate-600: #8d9aa1;
+  --color-cyan-200: #0a6e80;
+  --color-cyan-400: #0b7c8e;
+  --color-cyan-500: #1493a6;
+  --color-cyber-cyan: #0b7c8e;
 }
 
 html {
   scroll-behavior: smooth;
-  background-color: #050505;
+  background-color: var(--zb-page);
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -23,8 +61,8 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 html, body {
-  background: #050505;
-  color: #f1f5f9;
+  background: var(--zb-page);
+  color: var(--zb-ink);
   font-family: var(--font-sans);
   overflow-x: hidden;
   min-height: 100%;
@@ -40,19 +78,19 @@ html, body {
   width: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #050505;
+  background: var(--zb-page);
 }
 ::-webkit-scrollbar-thumb {
-  background: #1a1a1a;
+  background: var(--zb-scrollbar);
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #333333;
+  background: var(--zb-scrollbar-hover);
 }
 
 * {
   scrollbar-width: thin;
-  scrollbar-color: #1a1a1a #050505;
+  scrollbar-color: var(--zb-scrollbar) var(--zb-page);
 }
 
 /* Premium Doppelrand (Double-Bezel) Glassmorphism */
@@ -135,4 +173,80 @@ html, body {
 }
 .animate-float {
   animation: float 6s ease-in-out infinite;
+}
+
+/* Light theme — same structure, inverted ink and glass */
+html.light .cyber-glass {
+  background: rgba(255, 255, 255, 0.78);
+  border-color: rgba(16, 23, 27, 0.08);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.95), 0 18px 50px rgba(16, 23, 27, 0.06);
+}
+
+html.light .cyber-glass-inner {
+  background: rgba(255, 255, 255, 0.62);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+html.light .cyber-glass-interactive:hover {
+  background: rgba(255, 255, 255, 0.94);
+  border-color: rgba(11, 124, 142, 0.35);
+}
+
+html.light .cyber-gradient-text {
+  background: linear-gradient(135deg, #10171b 20%, #0b7c8e 85%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+html.light .text-black {
+  color: #f7fbfc;
+}
+
+html.light .bg-black\/40 {
+  background-color: rgba(255, 255, 255, 0.72);
+}
+
+html.light .bg-black\/50 {
+  background-color: rgba(16, 23, 27, 0.04);
+}
+
+html.light .brand-cyan {
+  color: #0b7c8e;
+  filter: drop-shadow(0 0 8px rgba(11, 124, 142, 0.28));
+}
+
+html.light .poster-scrim {
+  background: rgba(242, 245, 246, 0.9);
+}
+
+html.light .poster-photo {
+  opacity: 0.28;
+  filter: saturate(0.65) brightness(1.55);
+}
+
+html.light .theme-field {
+  background-color: #ffffff;
+  color: #10171b;
+  border-color: rgba(16, 23, 27, 0.12);
+}
+
+html.light .theme-field::placeholder {
+  color: #8d9aa1;
+}
+
+html.light body ::selection {
+  background-color: #10171b;
+  color: #f7fbfc;
+}
+
+html.light .shadow-\[0_10px_40px_rgba\(0\,0\,0\,0\.8\)\] {
+  box-shadow: 0 10px 40px rgba(16, 23, 27, 0.1);
+}
+
+html.light .shadow-\[0_20px_60px_rgba\(0\,0\,0\,0\.8\)\] {
+  box-shadow: 0 20px 50px rgba(16, 23, 27, 0.12);
+}
+
+html.light .shadow-\[0_30px_60px_rgba\(0\,0\,0\,0\.9\)\] {
+  box-shadow: 0 24px 50px rgba(16, 23, 27, 0.14);
 }

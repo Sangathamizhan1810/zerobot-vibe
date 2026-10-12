@@ -62,11 +62,11 @@ export function EnquiriesSection() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2">
                 <label className="text-xs font-mono uppercase tracking-widest text-slate-400 pl-2">Name</label>
-                <input required type="text" className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white placeholder-slate-600 focus:outline-none focus:border-cyan-400/50 transition-colors" placeholder="John Doe" />
+                <input required type="text" className="theme-field w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white placeholder-slate-600 focus:outline-none focus:border-cyan-400/50 transition-colors" placeholder="John Doe" />
               </div>
               <div className="space-y-2">
                 <label className="text-xs font-mono uppercase tracking-widest text-slate-400 pl-2">Email</label>
-                <input required type="email" className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white placeholder-slate-600 focus:outline-none focus:border-cyan-400/50 transition-colors" placeholder="john@company.com" />
+                <input required type="email" className="theme-field w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white placeholder-slate-600 focus:outline-none focus:border-cyan-400/50 transition-colors" placeholder="john@company.com" />
               </div>
             </div>
 
@@ -76,7 +76,7 @@ export function EnquiriesSection() {
                 <button
                   type="button"
                   onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                  className={`w-full bg-white/5 border rounded-2xl px-6 py-4 text-left text-white focus:outline-none transition-colors flex items-center justify-between ${
+                  className={`theme-field w-full bg-white/5 border rounded-2xl px-6 py-4 text-left text-white focus:outline-none transition-colors flex items-center justify-between ${
                     isDropdownOpen ? 'border-cyan-400/50' : 'border-white/10 hover:border-white/20'
                   }`}
                 >
@@ -87,7 +87,7 @@ export function EnquiriesSection() {
                 </button>
 
                 {isDropdownOpen && (
-                  <div className="absolute top-full left-0 right-0 mt-3 rounded-[1.5rem] bg-[#0a0a0a]/95 backdrop-blur-3xl border border-white/10 shadow-[0_20px_60px_rgba(0,0,0,0.8)] z-50 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200">
+                  <div className="absolute top-full left-0 right-0 mt-3 rounded-[1.5rem] bg-panel/95 backdrop-blur-3xl border border-white/10 shadow-[0_20px_60px_rgba(0,0,0,0.8)] z-50 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200">
                     <div className="py-2">
                       {subjects.map((subject) => (
                         <button
@@ -117,7 +117,7 @@ export function EnquiriesSection() {
 
             <div className="space-y-2">
               <label className="text-xs font-mono uppercase tracking-widest text-slate-400 pl-2">Message</label>
-              <textarea required rows={5} className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white placeholder-slate-600 focus:outline-none focus:border-cyan-400/50 transition-colors resize-none" placeholder="How can we collaborate?"></textarea>
+              <textarea required rows={5} className="theme-field w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white placeholder-slate-600 focus:outline-none focus:border-cyan-400/50 transition-colors resize-none" placeholder="How can we collaborate?"></textarea>
             </div>
 
             <div className="pt-4 flex items-center justify-end">

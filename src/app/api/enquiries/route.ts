@@ -13,7 +13,13 @@ export async function GET() {
 
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json();
+    const body = (await request.json()) as {
+      name?: string;
+      email?: string;
+      organization?: string;
+      inquiryType?: string;
+      message?: string;
+    };
     const { name, email, organization, inquiryType, message } = body;
 
     // 1. Validation & Sanitization

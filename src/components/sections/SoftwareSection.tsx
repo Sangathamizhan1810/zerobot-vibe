@@ -1,11 +1,11 @@
 "use client";
 
-import { Code2, ArrowRight, Globe, Smartphone, Layout, Palette, Cpu } from "lucide-react";
+import { Code2, ArrowRight, Globe, Smartphone, Layout, Palette, Cpu, type LucideIcon } from "lucide-react";
 import { FadeInSection } from "@/components/layout/FadeInSection";
 import { softwareServices } from "@/data/services";
 import Link from "next/link";
 
-const iconMap: Record<string, React.ElementType> = {
+const iconMap: Record<string, LucideIcon> = {
   Globe,
   Smartphone,
   Layout,

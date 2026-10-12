@@ -21,7 +21,7 @@ export const PosterBackground = ({
           fill
           priority
           sizes="100vw"
-          className={`object-cover object-center ${
+          className={`poster-photo object-cover object-center ${
             variant === "subtle" ? "opacity-60" : variant === "intense" ? "opacity-100" : "opacity-85"
           }`}
         />
@@ -43,8 +43,9 @@ export const PosterBackground = ({
       )}
 
       {/* 4. Ambient Vignette Gradient for Depth */}
-      <div className="absolute inset-0 bg-gradient-to-t from-[#020609] via-transparent to-[#020609]/70" />
-      <div className="absolute inset-0 bg-gradient-to-r from-[#020609]/60 via-transparent to-[#020609]/60" />
+      <div className="absolute inset-0 bg-gradient-to-t from-vignette via-transparent to-vignette/70" />
+      <div className="absolute inset-0 bg-gradient-to-r from-vignette/60 via-transparent to-vignette/60" />
+      <div className="poster-scrim absolute inset-0" />
 
       {/* 5. Animated Subtle Scanning Light Line */}
       <div className="absolute inset-0 overflow-hidden opacity-25">

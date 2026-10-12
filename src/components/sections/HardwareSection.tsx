@@ -34,7 +34,7 @@ export function HardwareSection() {
             <div className="grid grid-cols-1 md:grid-cols-12 gap-12 items-center relative z-10">
               {/* VISUAL AVATAR */}
               <div className="md:col-span-4 flex flex-col items-center justify-center text-center">
-                <div className="relative w-48 h-48 sm:w-56 sm:h-56 rounded-[2rem] bg-[#050505] border border-white/10 p-6 flex flex-col items-center justify-center group-hover:border-white/30 transition-all duration-500 cyber-glass-inner">
+                <div className="relative w-48 h-48 sm:w-56 sm:h-56 rounded-[2rem] bg-canvas border border-white/10 p-6 flex flex-col items-center justify-center group-hover:border-white/30 transition-all duration-500 cyber-glass-inner">
                   <div className="w-24 h-24 rounded-full bg-white/5 border border-white/20 flex items-center justify-center mb-4 group-hover:scale-105 transition-transform duration-500">
                     <Eye className="w-12 h-12 text-white" />
                   </div>
